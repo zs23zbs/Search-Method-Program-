@@ -7,3 +7,12 @@ search_tree = { # Based on Adjacencies.txt input file, looks as so becuase it is
     "Harper" : ["Anthony", "Attica"],
     "Argonia" : ["Anthony", "Rago", "Caldwell"]
 }
+
+"""Breadth First Search Function"""
+def bfs (search_tree, root):
+    visited_nodes = set() # Set of nodes that have been visted, no duplicates since nodes can't be visited twice 
+    visit_order = [] # List for the order of which the nodes are visited 
+    queue = deque() # To put nodes in when being visited 
+
+    queue.append(root) # Starting with searching the root of tree, put into queue
+    
