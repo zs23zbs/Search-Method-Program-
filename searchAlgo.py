@@ -21,4 +21,7 @@ def bfs (search_tree, root):
         visit_order.append(node) # add visiting node to the visit order 
         visited_nodes.append(node) # add the now newly visited node into the visited container 
 
-        
+        for child in search_tree[child]: # iterate through the child nodes of the ones that are visited 
+            if child not in queue: # if child node is not in queue 
+                visit_order.append(child) # add child node to visit order container
+    return visit_order         
