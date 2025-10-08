@@ -15,4 +15,10 @@ def bfs (search_tree, root):
     queue = deque() # To put nodes in when being visited 
 
     queue.append(root) # Starting with searching the root of tree, put into queue
-    
+
+    while queue: # while there are still nodes to search for 
+        node = queue.popleft() # get the left most node first 
+        visit_order.append(node) # add visiting node to the visit order 
+        visited_nodes.append(node) # add the now newly visited node into the visited container 
+
+        
