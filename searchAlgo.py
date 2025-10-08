@@ -9,7 +9,7 @@ search_tree = { # Based on Adjacencies.txt input file, looks as so becuase it is
 }
 
 """Breadth First Search Function"""
-def bfs (search_tree, root):
+def bfs(search_tree, root):
     visited_nodes = set() # Set of nodes that have been visted, no duplicates since nodes can't be visited twice 
     visit_order = [] # List for the order of which the nodes are visited 
     queue = deque() # To put nodes in when being visited 
@@ -29,3 +29,7 @@ def bfs (search_tree, root):
 # print("For Breadth First Search Algorithm: \n", bfs(search_tree,"Anthony"))
 
 """Depth First Search Function"""
+def dfs(search_tree, root_node):
+    traversal_list = [] # container for traversal sequence
+    nodes_visited = set() # container for all the nodes that've been visited 
+    stack = [root_node] #Initiate "stack" with the root of search tree 
