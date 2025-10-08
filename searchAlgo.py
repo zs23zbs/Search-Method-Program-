@@ -26,7 +26,7 @@ def bfs(search_tree, root):
                 queue.append(child) # add child node to visit order container
     return visit_order # should return the order of which the nodes were visited 
 
-# print("For Breadth First Search Algorithm: \n", bfs(search_tree,"Anthony"))
+#print("For Breadth First Search Algorithm: \n", bfs(search_tree,"Anthony"))
 
 """Depth First Search Function"""
 def dfs(search_tree, root_node):
@@ -45,4 +45,4 @@ def dfs(search_tree, root_node):
                     stack.append(adjacent_nodes) # add nodes to the stack 
     return traversal_list
 
-print("For Depth First Search Algorithm: \n", dfs(search_tree,"Anthony"))
+# print("\nFor Depth First Search Algorithm: \n", dfs(search_tree,"Anthony"))
