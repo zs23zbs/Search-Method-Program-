@@ -26,4 +26,6 @@ def bfs (search_tree, root):
                 queue.append(child) # add child node to visit order container
     return visit_order # should return the order of which the nodes were visited 
 
-print("For Breadth First Search Algorithm: \n", bfs(search_tree,"Anthony"))
+# print("For Breadth First Search Algorithm: \n", bfs(search_tree,"Anthony"))
+
+"""Depth First Search Function"""
