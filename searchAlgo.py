@@ -43,7 +43,6 @@ def dfs(search_tree, root_node):
             for adjacent_nodes in reversed(search_tree.get(new_node, [])): # ensures LIFO by looking at child/leaf nodes backwards in the search_tree
                 if adjacent_nodes not in nodes_visited: # if nodes have not been visited yet 
                     stack.append(adjacent_nodes) # add nodes to the stack 
-                    nodes_visited.add(adjacent_nodes)
     return traversal_list
 
 print("For Depth First Search Algorithm: \n", dfs(search_tree,"Anthony"))
