@@ -45,3 +45,5 @@ def dfs(search_tree, root_node):
                 stack.append(adjacent_nodes)
                 nodes_visited.add(adjacent_nodes)
     return traversal_list
+
+print("For Depth First Search Algorithm: \n", dfs(search_tree,"Anthony"))
