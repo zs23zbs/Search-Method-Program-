@@ -40,10 +40,10 @@ def dfs(search_tree, root_node):
             traversal_list.append(new_node) # add new node to the traversal life 
             nodes_visited.add(new_node) # add new node is now a visited node
         
-        for adjacent_nodes in search_tree.get(new_node, []): 
-            if adjacent_nodes not in stack:
-                stack.append(adjacent_nodes)
-                nodes_visited.add(adjacent_nodes)
+            for adjacent_nodes in search_tree.get(new_node, []): 
+                if adjacent_nodes not in stack:
+                    stack.append(adjacent_nodes)
+                    nodes_visited.add(adjacent_nodes)
     return traversal_list
 
 print("For Depth First Search Algorithm: \n", dfs(search_tree,"Anthony"))
