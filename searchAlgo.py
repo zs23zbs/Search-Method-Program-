@@ -34,9 +34,14 @@ def dfs(search_tree, root_node):
     nodes_visited = set() # container for all the nodes that've been visited 
     stack = [root_node] #Initiate "stack" with the root of search tree (LIFO)
 
-    while stack: # while there are adjacent nodes 
+    while stack: # while there are nodes to visit
         new_node = stack.pop() # pop node at the top of the stack
         if new_node not in nodes_visited: # if the node if not in the visited list 
             traversal_list.append(new_node) # add new node to the traversal life 
             nodes_visited.add(new_node) # add new node is now a visited node
-             
+        
+        for adjacent_nodes in search_tree.get(new_node, []): 
+            if adjacent_nodes not in stack:
+                stack.append(adjacent_nodes)
+                nodes_visited.add(adjacent_nodes)
+    return traversal_list
