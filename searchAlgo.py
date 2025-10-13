@@ -62,7 +62,7 @@ def DLS(search_tree, start, target, limit):
 
         for neighbor in search_tree[node]:
             if neighbor not in explored: 
-                path = helper(neighbor, depth-1)
+                path = helper(neighbor, depth - 1)
 
             if path is not None: 
                 return [node] + path
@@ -72,5 +72,8 @@ def DLS(search_tree, start, target, limit):
     return helper(start, limit - 1)
 
 def iddfs(start, target, depth_limit):
-    for i in range(depth_limit):
-         result = DLS(search_tree, start, target, )
+    for depth in range(depth_limit + 1): # iterate through depth until the end of level of tree
+        result = DLS(search_tree, start, target, depth) 
+        if result is not None: # if not None, return the path if the target is found 
+            return result  # returning the path if target is found
+    return None
