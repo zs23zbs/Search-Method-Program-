@@ -60,7 +60,7 @@ def DLS(search_tree, start, target, limit):
         
         explored.add(node) # keep adding node to container
 
-        for neighbor in search_tree[node]:
+        for neighbor in search_tree.get(node, []):
             if neighbor not in explored: 
                 path = helper(neighbor, depth - 1)
 
