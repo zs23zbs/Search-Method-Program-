@@ -77,3 +77,5 @@ def iddfs(start, target, depth_limit):
         if result is not None: # if not None, return the path if the target is found 
             return result  # returning the path if target is found
     return None
+
+print("\nFor Iterative Deepening Depth First Search Algorithm: \n", iddfs("Anthony", "Rago", 3))
