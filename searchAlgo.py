@@ -78,4 +78,4 @@ def iddfs(start, target, depth_limit):
             return result  # returning the path if target is found
     return None
 
-print("\nFor Iterative Deepening Depth First Search Algorithm: \n", iddfs("Anthony", "Rago", 3))
+print("\nFor Iterative Deepening Depth First Search Algorithm: \n", iddfs("Anthony", "Rago", 7))
