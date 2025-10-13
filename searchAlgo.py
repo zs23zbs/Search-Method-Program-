@@ -64,8 +64,8 @@ def DLS(search_tree, start, target, limit):
             if neighbor not in explored: 
                 path = helper(neighbor, depth - 1)
 
-            if path is not None: 
-                return [node] + path
+                if path is not None: 
+                    return [node] + path
             
         return None 
         
