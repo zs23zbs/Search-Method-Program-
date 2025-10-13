@@ -48,3 +48,24 @@ def dfs(search_tree, root_node):
 # print("\nFor Depth First Search Algorithm: \n", dfs(search_tree,"Anthony"))
 
 """Iterative Deepening Depth First Search"""
+def DLS(search_tree, start, target, limit):
+    explored = set() # container for the visited nodes 
+
+    def helper(node, depth): # new name for helper function
+        if depth < 0: # if depth is a negative number 
+            return None
+        
+        if node == target: 
+            return [node] # return the path explored
+        
+        return explored.add(node) # keep adding node to container
+        for neighbor in search_tree[node]:
+            if neighbor not in explored: 
+                path = helper(neighbor, depth-1)
+
+            if path is not None: 
+                return [node] + path
+            
+            return none 
+        
+    return helper(start, limit - 1)
