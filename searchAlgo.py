@@ -80,28 +80,31 @@ def iddfs(start, target, depth_limit):
 
 """Best-First Search"""
 def best_first(search_tree, start_node, target_node): 
-    openList = set(start_node)
+    openList = [start_node]
     closedList = []
-    path = []
+    parent = {} 
 
     while len(openList) > 0: 
-        best_node = openList.append(best_node)
+        best_node = openList[0]
         openList.remove(best_node)
         closedList.append(best_node)
 
         if best_node == target_node:
-            path.add(best_node)
+            path = []
+
+            while best_node in parent:
+                path.insert(0, best_node)
+                best_node = parent[best_node]
+            path.insert(0, start_node)
             return path 
+        
         neighbors = search_tree[best_node]
 
         for n in neighbors:
-            if n not in closedList or openList: 
+            if n not in closedList and n not in openList: 
                 openList.add(n)
-            elif n in openList:
-                if path(best_node) <= path():
-                    pass # don't know how to replace parents of n 
-                elif n not in closedList:
-                    openList.add(n)
-    return path 
+                parent[n] = best_node
+
+    return None 
 
 print("\nFor Iterative Deepening Depth First Search Algorithm: \n", iddfs("Anthony", "Mayfield", 7))
