@@ -98,13 +98,13 @@ def best_first(search_tree, start_node, target_node):
             path.insert(0, start_node)
             return path 
         
-        neighbors = search_tree[best_node]
+        neighbors = search_tree.get(best_node, [])
 
         for n in neighbors:
             if n not in closedList and n not in openList: 
-                openList.add(n)
+                openList.append(n)
                 parent[n] = best_node
 
     return None 
 
-print("\nFor Iterative Deepening Depth First Search Algorithm: \n", iddfs("Anthony", "Mayfield", 7))
+print("\nFor Best First Search: \n", best_first(search_tree,"Anthony", "Mayfield", ))
