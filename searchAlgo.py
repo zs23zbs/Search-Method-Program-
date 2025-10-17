@@ -47,7 +47,7 @@ def dfs(search_tree, root_node):
 
 # print("\nFor Depth First Search Algorithm: \n", dfs(search_tree,"Anthony"))
 
-"""Iterative Deepening Depth First Search"""
+"""Iterative Deepening Depth First Search""" # Must edit a bit more.
 def DLS(search_tree, start, target, limit):
     explored = set() # container for the visited nodes 
 
@@ -78,4 +78,30 @@ def iddfs(start, target, depth_limit):
             return result  # returning the path if target is found
     return None
 
-print("\nFor Iterative Deepening Depth First Search Algorithm: \n", iddfs("Anthony", "Rago", 7))
+"""Best-First Search"""
+def best_first(search_tree, start_node, target_node): 
+    openList = set(start_node)
+    closedList = []
+    path = []
+
+    while len(openList) > 0: 
+        best_node = openList.append(best_node)
+        openList.remove(best_node)
+        closedList.append(best_node)
+
+        if best_node == target_node:
+            path.add(best_node)
+            return path 
+        neighbors = search_tree[best_node]
+
+        for n in neighbors:
+            if n not in closedList or openList: 
+                openList.add(n)
+            elif n in openList:
+                if path(best_node) <= path():
+                    pass # don't know how to replace parents of n 
+                elif n not in closedList:
+                    openList.add(n)
+    return path 
+
+print("\nFor Iterative Deepening Depth First Search Algorithm: \n", iddfs("Anthony", "Mayfield", 7))
