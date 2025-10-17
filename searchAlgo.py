@@ -1,4 +1,5 @@
 from collections import deque 
+import heapq
 
 search_tree = { # Based on Adjacencies.txt input file, looks as so becuase it is bidirectional (symmetrical)
     "Anthony" : ["Bluff_City", "Argonia", "Harper"],
@@ -78,33 +79,36 @@ def iddfs(start, target, depth_limit):
             return result  # returning the path if target is found
     return None
 
-"""Best-First Search"""
+"""Best-First Search""" #Need to review and probably change
 def best_first(search_tree, start_node, target_node): 
     openList = [start_node]
     closedList = []
     parent = {} 
 
-    while len(openList) > 0: 
-        best_node = openList[0]
-        openList.remove(best_node)
-        closedList.append(best_node)
+    while len(openList) > 0:  
+        best_node = openList[0]  
+        openList.remove(best_node) 
+        closedList.append(best_node) 
 
-        if best_node == target_node:
-            path = []
-
-            while best_node in parent:
-                path.insert(0, best_node)
+        if best_node == target_node: 
+            path = [] 
+            while best_node in parent: 
+                path.insert(0, best_node)  
                 best_node = parent[best_node]
             path.insert(0, start_node)
             return path 
         
-        neighbors = search_tree.get(best_node, [])
+        neighbors = search_tree.get(best_node, [])  
 
-        for n in neighbors:
+        for n in neighbors: 
             if n not in closedList and n not in openList: 
-                openList.append(n)
-                parent[n] = best_node
+                openList.append(n) 
+                parent[n] = best_node 
 
-    return None 
+    return None
 
-print("\nFor Best First Search: \n", best_first(search_tree,"Anthony", "Mayfield", ))
+"""A* Search""" 
+def a_search(start, goal, neighbors_fn, dist_fn, heuristic_fn):
+    pass
+
+print("\nFor Best First Search: \n", best_first(search_tree,"Anthony", "Attica", ))
