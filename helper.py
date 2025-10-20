@@ -139,4 +139,14 @@ def graph_visualization(graph, coordinates, path=None, visited_node=None, fronti
 
     # slider speed button
     ax_slider = plt.axes([0.1, 0.05, 0.4, 0.05])
-    speed_slider = Slider(ax_slider, "Frame", 0, max(len(visited_list) -1, 1, valint=0, valstep =1) speed_slider.on_changed(on_slider)
+    speed_slider = Slider(ax_slider, "Frame", 0, max(len(visited_list) -1, 1, valinit=0, valstep=1))
+    speed_slider.on_changed(on_slider)
+
+    # loop for automatic play
+    while True: 
+        if not paused[0] and frame_index[0] < len(visited_list) -1:
+            frame_index[0] += 1
+            update(frame_index[0])
+            speed= 0.5 
+            plt.pause(speed)
+        plt.pause(0.01)
