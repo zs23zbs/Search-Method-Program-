@@ -1,4 +1,6 @@
 import csv 
+import networkx as nx
+import matplotlib.pyplot as plt 
 
 # Load input file from graphs 
 def load_graph(filename):
@@ -22,12 +24,10 @@ def load_coordinates_csv(filename):
     coordinates = {}
     with open(filename, newline='') as csvfile: 
         read = csv.reader(csvfile)
-        for row in read:
-            if row[0].lower() == "city": # Skip the header with row label "city"
-                continue
+        for row in read: # get each city with their corresponding latitudes and longitudes and store them into coordinates
             city = row[0].strip()
             latitude = float(row[1])
             longitude =  float(row[2])
-            coordinates[city] (latitude, longitude)
-            
+            coordinates[city] = (latitude, longitude)
+
     return coordinates
