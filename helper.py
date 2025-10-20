@@ -31,3 +31,17 @@ def load_coordinates_csv(filename):
             coordinates[city] = (latitude, longitude)
 
     return coordinates
+
+def graph_visualization(graph, coordinates, path=None, visited_node=None, frontier_node=None):
+
+    G = nx.Graph() 
+    # iterate through dictionary, both key and value. Create edge betwen two nodes 
+    for nodes, neighbors in graph.items():
+        for n in neighbors: 
+            G.add_edge(nodes, n)
+
+    position = coordinates
+
+    # create layout of graph 
+    figure, ax = plt.subplots(figsize=(12, 8))
+    plt.subplots_adjust(bottom=0.2)
