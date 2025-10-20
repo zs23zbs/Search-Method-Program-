@@ -59,3 +59,43 @@ def graph_visualization(graph, coordinates, path=None, visited_node=None, fronti
         visited_list = list(visited_node)
     else: 
         visited_list = [] 
+    
+     # function to update to frame
+    def update(frame):
+        ax.clear()
+        nx.draw_networkx_edges(G, position, alpha=0.3, ax=ax)
+        nx.draw_networkx_labels(G, position, font_size=8, ax=ax)
+
+        # draw the visited nodes to the current frame 
+        if visited_list:
+            nx.draw_networkx_nodes(
+                nodelist = visited_list[:frame+1],
+                node_color = "lightblue",
+                label = "Visited",
+                ax=ax
+            )
+        # draw the frontier nodes if there are any 
+        if frontier_node:
+            nx.draw_networkx_nodes(G, position,
+             nodelist=frontier_node,
+             node_color= "yellow",
+             label="Frontier",
+             ax=ax
+             )
+            
+        # draw final path
+        if path:
+            nx.draw_networkx_nodes(
+                G, 
+                position,
+                nodelist=path,
+                node_color="red",
+                label="Path",
+                ax=ax
+            )
+            path_edges = list(zip(path[:-1], path[1:]))
+            nx.draw_networkx_edges(G, position, edgelist=path_edges,width=3, edge_color="red", ax=ax)
+
+        ax.set_title("Visualization for Graph")
+        ax.axis("off")
+        ax.legend(scatterpoints=1)
