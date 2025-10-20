@@ -45,3 +45,17 @@ def graph_visualization(graph, coordinates, path=None, visited_node=None, fronti
     # create layout of graph 
     figure, ax = plt.subplots(figsize=(12, 8))
     plt.subplots_adjust(bottom=0.2)
+
+    # draw the base edges
+    nx.draw_networkx_edges(G, position, alpha=0.3, ax=ax)
+    nx.draw_networkx_labels(G, position, font_size=8, ax=ax)
+
+     # the animation control variables 
+    frame_index = [0]
+    paused = [False]
+
+    # convert the visited_nodes into lists if a set 
+    if visited_node:
+        visited_list = list(visited_node)
+    else: 
+        visited_list = [] 
