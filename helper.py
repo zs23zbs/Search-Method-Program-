@@ -2,6 +2,7 @@ import csv
 import networkx as nx
 import matplotlib.pyplot as plt 
 from matplotlib.widgets import Button, Slider
+from matplotlib.animation import FuncAnimation
 
 # Load input file from graphs 
 def load_graph(filename):
@@ -141,10 +142,10 @@ def graph_visualization(graph, coordinates, path=None, visited_node=None, fronti
     speed_slider.on_changed(on_slider)
 
     # loop for automatic play
-    while True: 
-        if not paused[0] and frame_index[0] < len(visited_list) -1:
+    def next_frame(_): # AI recommandation to fully run the visualization
+        if not paused[0] and frame_index[0] < len(visited_list) - 1:
             frame_index[0] += 1
             update(frame_index[0])
-            speed= 0.5 
-            plt.pause(speed)
-        plt.pause(0.01)
+
+    ani = FuncAnimation(fig, next_frame, interval=500)  # interval in ms
+    plt.show()
