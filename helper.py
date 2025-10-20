@@ -1,6 +1,7 @@
 import csv 
 import networkx as nx
 import matplotlib.pyplot as plt 
+from matplotlib.widgets import Button, Slider
 
 # Load input file from graphs 
 def load_graph(filename):
@@ -35,26 +36,25 @@ def load_coordinates_csv(filename):
 def graph_visualization(graph, coordinates, path=None, visited_node=None, frontier_node=None):
 
     G = nx.Graph() 
-    # iterate through dictionary, both key and value. Create edge betwen two nodes 
+    # for every node and its neighbors, make an edge 
     for nodes, neighbors in graph.items():
         for n in neighbors: 
             G.add_edge(nodes, n)
 
     position = coordinates
 
-    # create layout of graph 
-    figure, ax = plt.subplots(figsize=(12, 8))
+    # create layout window of graph 
+    ax = plt.subplots(figsize=(12, 8))
     plt.subplots_adjust(bottom=0.2)
 
-    # draw the base edges
+    # draw the base edges in graph, at position
     nx.draw_networkx_edges(G, position, alpha=0.3, ax=ax)
     nx.draw_networkx_labels(G, position, font_size=8, ax=ax)
 
-     # the animation control variables 
+     # the animation control variables, step of animation & pause/resume
     frame_index = [0]
     paused = [False]
 
-    # convert the visited_nodes into lists if a set 
     if visited_node:
         visited_list = list(visited_node)
     else: 
@@ -62,6 +62,7 @@ def graph_visualization(graph, coordinates, path=None, visited_node=None, fronti
     
      # function to update to frame
     def update(frame):
+        # clear and then draw edges for every frame 
         ax.clear()
         nx.draw_networkx_edges(G, position, alpha=0.3, ax=ax)
         nx.draw_networkx_labels(G, position, font_size=8, ax=ax)
@@ -93,9 +94,30 @@ def graph_visualization(graph, coordinates, path=None, visited_node=None, fronti
                 label="Path",
                 ax=ax
             )
-            path_edges = list(zip(path[:-1], path[1:]))
+            path_edges = list(zip(path[:-1], path[1:])) # drawing nodes along the path 
             nx.draw_networkx_edges(G, position, edgelist=path_edges,width=3, edge_color="red", ax=ax)
 
         ax.set_title("Visualization for Graph")
         ax.axis("off")
         ax.legend(scatterpoints=1)
+    
+    #for the buttons
+    def while_paused(event):
+        paused[0] = not paused[0]
+    
+    def restarting(event):
+        frame_index[0] = 0
+        update(0)
+        plt.draw()
+
+    def on_step(event):
+        if frame_index[0] < len(visited_list) -1:
+            frame_index[0] += 1
+            update(frame_index[0])
+            plt.draw
+    
+    # slider button
+    def on_slider(val):
+        index = int(speed_slider.val)
+        update(index)
+        plt.draw()
