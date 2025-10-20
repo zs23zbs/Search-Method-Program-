@@ -121,3 +121,8 @@ def graph_visualization(graph, coordinates, path=None, visited_node=None, fronti
         index = int(speed_slider.val)
         update(index)
         plt.draw()
+
+    # pause button
+    ax_pause = plt.axes([0.7, 0.03, 0.1, 0.03])
+    pause_button = Button(ax_pause, "Play/Plause")
+    pause_button.on_clicked(while_paused)
