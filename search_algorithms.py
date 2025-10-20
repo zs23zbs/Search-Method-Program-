@@ -1,8 +1,9 @@
 from collections import deque 
 import heapq
+import math
 
 """Breadth First Search Function"""
-def bfs(search_tree, root):
+def bfs(graph, root):
     visited_nodes = set() # Set of nodes that have been visted, no duplicates 
     visit_order = [] 
     queue = deque() # To put nodes in when being visited 
@@ -14,13 +15,13 @@ def bfs(search_tree, root):
         visit_order.append(node)
         visited_nodes.add(node) 
 
-        for child in search_tree.get(node, []): # iterate through the child nodes of the ones that are visited
+        for child in graph.get(node, []): # iterate through the child nodes of the ones that are visited
             if child not in visited_nodes:
                 queue.append(child) 
     return visit_order # should return the order of which the nodes were visited 
 
 """Depth First Search Function"""
-def dfs(search_tree, root_node):
+def dfs(graph, root_node):
     traversal_list = [] # container for traversal sequence
     nodes_visited = set() # container for all the nodes that've been visited 
     stack = [root_node] #Initiate "stack" with the root of search tree (LIFO)
@@ -31,13 +32,13 @@ def dfs(search_tree, root_node):
             traversal_list.append(new_node) 
             nodes_visited.add(new_node) 
         
-            for adjacent_nodes in reversed(search_tree.get(new_node, [])): # ensures LIFO by looking at child/leaf nodes backwards in the search_tree
+            for adjacent_nodes in reversed(graph.get(new_node, [])): # ensures LIFO by looking at child/leaf nodes backwards in the search_tree
                 if adjacent_nodes not in nodes_visited:
                     stack.append(adjacent_nodes) 
     return traversal_list
 
 """Iterative Deepening Depth First Search""" 
-def DLS(search_tree, start, target, limit): # Funciton to prevent the algorithm to search too deep into the search space 
+def DLS(graph, start, target, limit): # Funciton to prevent the algorithm to search too deep into the search space 
     explored = set()
 
     def helper(node, depth): 
@@ -49,7 +50,7 @@ def DLS(search_tree, start, target, limit): # Funciton to prevent the algorithm 
         
         explored.add(node) # continue to add nodes to container
 
-        for neighbor in search_tree.get(node, []):
+        for neighbor in graph.get(node, []):
             if neighbor not in explored: 
                 path = helper(neighbor, depth - 1) # Reduces the depth of the search space 
 
@@ -60,15 +61,15 @@ def DLS(search_tree, start, target, limit): # Funciton to prevent the algorithm 
         
     return helper(start, limit - 1) 
 
-def iddfs(start, target, depth_limit):
+def iddfs(graph,start, target, depth_limit):
     for depth in range(depth_limit + 1): # iterate through depth until the end of level of tree
-        result = DLS(search_tree, start, target, depth) 
+        result = DLS(graph, start, target, depth) 
         if result is not None:
             return result  # returning the path if target is found
     return None
 
 """Best-First Search"""
-def best_first(search_tree, start_node, target_node): 
+def best_first(graph, start_node, target_node): 
     openList = [start_node] # frontier queue -> nodes that need to be explored 
     closedList = []
     parent = {} 
@@ -88,7 +89,7 @@ def best_first(search_tree, start_node, target_node):
             return path 
         
         # Haven't found target node, expand search space to neighboring nodes 
-        neighbors = search_tree.get(next_node, []) 
+        neighbors = graph.get(next_node, []) 
         for n in neighbors: 
             if n not in closedList and n not in openList: 
                 openList.append(n) 
@@ -97,43 +98,49 @@ def best_first(search_tree, start_node, target_node):
     return None 
 
 """A* Search""" 
-def a_star(start, goal, neighbors_fn, dist_fn, heuristic_fn):
-    open_heap = [] # priority queue 
-    heapq.heappush(open_heap, (0, start)) # add to heap with total lowest cost starting with 0
+def a_star_generator(start, goal, graph, coordinates):
+    """A* search as a generator for animation."""
+    def heuristic(n1, n2):
+        lat1, lon1 = coordinates[n1]
+        lat2, lon2 = coordinates[n2]
+        return math.sqrt((lat1 - lat2) ** 2 + (lon1 - lon2) ** 2)
 
-    # start tracking dictionaries 
-    g_scores = {start: 0} 
+    open_heap = []
+    heapq.heappush(open_heap, (0, start))
+    g_scores = {start: 0}
     parents = {start: None}
-    visitedList = set()
+    visited = set()
 
     while open_heap:
-        f, current = heapq.heappop(open_heap) # return node with lowest score
+        f, current = heapq.heappop(open_heap)
+        visited.add(current)
 
-        if current == goal: 
-            return reconstruct_path(parents, current) 
-        
-        visitedList.add(current)
+        # Yield current state for animation
+        yield current, list(visited), [n for _, n in open_heap], parents
 
-        for neighbor in neighbors_fn(current):
-            tentative_g = g_scores[current] + dist_fn(current, neighbor)
+        if current == goal:
+            # Reconstruct path at the end
+            path = []
+            node = current
+            while node is not None:
+                path.append(node)
+                node = parents[node]
+            path.reverse()
+            yield "done", path, visited, []
+            return
+
+        for neighbor in graph.get(current, []):
+            tentative_g = g_scores[current] + 1
             if neighbor not in g_scores or tentative_g < g_scores[neighbor]:
                 g_scores[neighbor] = tentative_g
-                f_score = tentative_g + heuristic_fn(neighbor, goal)
+                f_score = tentative_g + heuristic(neighbor, goal)
                 heapq.heappush(open_heap, (f_score, neighbor))
                 parents[neighbor] = current
 
-    return None
-
-def neighbors_fn(node):
-    return search_tree.get(node, [])
-
-def dist_fn(a, b):
-    return 1
-
 def reconstruct_path(parents, node):
-    path = [] 
+    path = []
     while node is not None:
         path.append(node)
-        node = parents[node]
+        node = parents.get(node)
     path.reverse()
-    return path 
+    return path
