@@ -46,7 +46,7 @@ def single_search(graph, coordinates):
         dfs_graph = dfs(graph, start)
         if goal in dfs_graph:
             goal_indx = dfs_graph.index(goal) + 1
-            path = dfs_graph[goal_indx]
+            path = dfs_graph[:goal_indx]
         else: 
             path = dfs_graph
         visited_nodes = dfs_graph
@@ -86,4 +86,12 @@ def single_search(graph, coordinates):
         print("No path was found")
 
     # creating visualization 
-    graph_visualization(graph, coordinates, path=path, visited_nodes=visited_nodes, frontier_node=[])
+    graph_visualization(graph, coordinates, path=path, visited_node=visited_nodes, frontier_node=[])
+
+if __name__ == "__main__":
+    graph = load_graph("Adjacencies.txt")
+    coordinates = load_coordinates_csv("coordinates (1).csv")
+
+    print("\n=== Search Visualization===")
+    single_search(graph, coordinates)
+    

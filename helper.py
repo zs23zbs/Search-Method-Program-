@@ -44,7 +44,7 @@ def graph_visualization(graph, coordinates, path=None, visited_node=None, fronti
     position = coordinates
 
     # create layout window of graph 
-    ax = plt.subplots(figsize=(12, 8))
+    fig, ax = plt.subplots(figsize=(12, 8))
     plt.subplots_adjust(bottom=0.2)
 
     # draw the base edges in graph, at position
@@ -69,7 +69,7 @@ def graph_visualization(graph, coordinates, path=None, visited_node=None, fronti
 
         # draw the visited nodes to the current frame 
         if visited_list:
-            nx.draw_networkx_nodes(
+            nx.draw_networkx_nodes(G, position,
                 nodelist = visited_list[:frame+1],
                 node_color = "lightblue",
                 label = "Visited",
@@ -86,9 +86,7 @@ def graph_visualization(graph, coordinates, path=None, visited_node=None, fronti
             
         # draw final path
         if path:
-            nx.draw_networkx_nodes(
-                G, 
-                position,
+            nx.draw_networkx_nodes(G, position,
                 nodelist=path,
                 node_color="red",
                 label="Path",
@@ -114,7 +112,7 @@ def graph_visualization(graph, coordinates, path=None, visited_node=None, fronti
         if frame_index[0] < len(visited_list) -1:
             frame_index[0] += 1
             update(frame_index[0])
-            plt.draw
+            plt.draw()
     
     # slider button
     def on_slider(val):
@@ -139,7 +137,7 @@ def graph_visualization(graph, coordinates, path=None, visited_node=None, fronti
 
     # slider speed button
     ax_slider = plt.axes([0.1, 0.05, 0.4, 0.05])
-    speed_slider = Slider(ax_slider, "Frame", 0, max(len(visited_list) -1, 1, valinit=0, valstep=1))
+    speed_slider = Slider(ax_slider, "Frame", 0, max(len(visited_list) -1, 1), valinit=0, valstep=1)
     speed_slider.on_changed(on_slider)
 
     # loop for automatic play
