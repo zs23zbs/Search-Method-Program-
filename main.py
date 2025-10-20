@@ -20,7 +20,7 @@ def single_search(graph, coordinates):
         exit(1)
 
     # print algorithm menu 
-    print("""\Algorithms Menu:
+    print("""\nAlgorithms Menu:
           1. BFS
           2. DFS
           3. IDDFS
@@ -32,7 +32,7 @@ def single_search(graph, coordinates):
     visited_nodes = []
     start_time = time.perf_counter()
 
-    # run the selection search 
+    # run the selection search (if-else)
     if user_choice == "1":
         bfs_graph = bfs(graph, start)
         if goal in bfs_graph: 
@@ -67,8 +67,23 @@ def single_search(graph, coordinates):
             if current == "done":
                 path = list(step[1])
                 visited_nodes = set(step[2])
+                break
             visited_nodes = set(step[1])
     else: 
         print("Invalid choice, Default to BFS")
         path = bfs(graph, start, goal)
         visited_nodes = path
+    
+    elasped = time.perf_counter() - start_time
+
+    # print the results 
+    if path:
+        print(f"\nShortest path from {start} to {goal}: ")
+        print(" ->".join(path))
+        print(f"Path Length: {len(path)}")
+        print(f"Runtime: {elasped:.4f}s")
+    else: 
+        print("No path was found")
+
+    # creating visualization 
+    graph_visualization(graph, coordinates, path=path, visited_nodes=visited_nodes, frontier_node=[])
