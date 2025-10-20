@@ -126,3 +126,17 @@ def graph_visualization(graph, coordinates, path=None, visited_node=None, fronti
     ax_pause = plt.axes([0.7, 0.03, 0.1, 0.03])
     pause_button = Button(ax_pause, "Play/Plause")
     pause_button.on_clicked(while_paused)
+
+    # step button
+    ax_step = plt.axes([0.81, 0.05, 0.1, 0.05])
+    step_button = Button(ax_step, "Step")
+    step_button.on_clicked(on_step)
+
+    # restart button
+    ax_restart = plt.axes([0.59, 0.05, 0.1, 0.05])
+    restart_button = Button(ax_restart, "Restart")
+    restart_button.on_clicked(restarting)
+
+    # slider speed button
+    ax_slider = plt.axes([0.1, 0.05, 0.4, 0.05])
+    speed_slider = Slider(ax_slider, "Frame", 0, max(len(visited_list) -1, 1, valint=0, valstep =1) speed_slider.on_changed(on_slider)
