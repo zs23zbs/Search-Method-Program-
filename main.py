@@ -61,14 +61,8 @@ def single_search(graph, coordinates):
     
     elif user_choice == "5":
         a_star_gen = a_star_generator(graph,start, goal, coordinates)
-
-        for step in a_star_gen:
-            current = step[0]
-            if current == "done":
-                path = list(step[1])
-                visited_nodes = set(step[2])
-                break
-            visited_nodes = set(step[1])
+        graph_visualization(graph, coordinates, generator=a_star_gen)
+        return
     else: 
         print("Invalid choice, Default to BFS")
         path = bfs(graph, start, goal)

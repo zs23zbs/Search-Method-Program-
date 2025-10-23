@@ -34,7 +34,7 @@ def load_coordinates_csv(filename):
 
     return coordinates
 
-def graph_visualization(graph, coordinates, path=None, visited_node=None, frontier_node=None):
+def graph_visualization(graph, coordinates, path=None, visited_node=None, frontier_node=None, generator=None):
 
     G = nx.Graph() 
     # for every node and its neighbors, make an edge 
@@ -68,24 +68,22 @@ def graph_visualization(graph, coordinates, path=None, visited_node=None, fronti
         nx.draw_networkx_edges(G, position, alpha=0.3, ax=ax)
         nx.draw_networkx_labels(G, position, font_size=8, ax=ax)
 
-        # draw the visited nodes to the current frame 
         if visited_list:
             nx.draw_networkx_nodes(G, position,
-                nodelist = visited_list[:frame+1],
-                node_color = "lightblue",
-                label = "Visited",
+                nodelist=visited_list[:frame+1],  # THIS is the key change
+                node_color="lightblue",
+                label="Visited",
                 ax=ax
             )
-        # draw the frontier nodes if there are any 
+
         if frontier_node:
             nx.draw_networkx_nodes(G, position,
-             nodelist=frontier_node,
-             node_color= "yellow",
-             label="Frontier",
-             ax=ax
-             )
-            
-        # draw final path
+                nodelist=frontier_node,
+                node_color="yellow",
+                label="Frontier",
+                ax=ax
+            )
+
         if path:
             nx.draw_networkx_nodes(G, position,
                 nodelist=path,
@@ -93,8 +91,8 @@ def graph_visualization(graph, coordinates, path=None, visited_node=None, fronti
                 label="Path",
                 ax=ax
             )
-            path_edges = list(zip(path[:-1], path[1:])) # drawing nodes along the path 
-            nx.draw_networkx_edges(G, position, edgelist=path_edges,width=3, edge_color="red", ax=ax)
+            path_edges = list(zip(path[:-1], path[1:]))
+            nx.draw_networkx_edges(G, position, edgelist=path_edges, width=3, edge_color="red", ax=ax)
 
         ax.set_title("Visualization for Graph")
         ax.axis("off")
@@ -147,5 +145,6 @@ def graph_visualization(graph, coordinates, path=None, visited_node=None, fronti
             frame_index[0] += 1
             update(frame_index[0])
 
-    ani = FuncAnimation(fig, next_frame, interval=500)  # interval in ms
+    ani = FuncAnimation(fig, update, frames=len(visited_list), interval=500, repeat=False)
+
     plt.show()
