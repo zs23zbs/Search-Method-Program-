@@ -97,7 +97,7 @@ def best_first(graph, start_node, target_node):
 
     return None 
 
-"""A* Search""" # Need help from AI to understand 
+"""A* Search"""
 def a_star_generator(start, goal, graph, coordinates):
     """A* search as a generator for animation."""
     def heuristic(n1, n2):
