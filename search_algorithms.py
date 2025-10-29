@@ -1,8 +1,8 @@
 from collections import deque 
-import heapq
+import heapq # For priority queue 
 import math
 
-"""Breadth First Search Function"""
+"""Breadth First Search Function""" 
 def bfs(graph, root):
     visited_nodes = set() # Set of nodes that have been visted, no duplicates 
     visit_order = [] 
@@ -45,17 +45,17 @@ def DLS(graph, start, target, limit): # Funciton to prevent the algorithm to sea
         if depth < 0: # if depth is a negative number 
             return None
         
-        if node == target: 
+        if node == target: # if the target node is found in search 
             return [node] # return the path explored
         
-        explored.add(node) # continue to add nodes to container
+        explored.add(node)
 
         for neighbor in graph.get(node, []):
             if neighbor not in explored: 
-                path = helper(neighbor, depth - 1) # Reduces the depth of the search space 
+                path = helper(neighbor, depth - 1) # Recursively reduces the depth of the search space 
 
                 if path is not None: 
-                    return [node] + path # build found path from start to target node 
+                    return [node] + path # build the now found path from start to target node 
             
         return None 
         
@@ -68,34 +68,48 @@ def iddfs(graph,start, target, depth_limit):
             return result  # returning the path if target is found
     return None
 
-"""Best-First Search"""
-def best_first(graph, start_node, target_node): 
-    openList = [start_node] # frontier queue -> nodes that need to be explored 
-    closedList = []
-    parent = {} 
+"""Best-First Search""" 
 
-    while len(openList) > 0: # while there are nodes that need to be explored 
-        next_node = openList[0]  # select the next node to explore 
-        openList.remove(next_node) 
-        closedList.append(next_node) 
+"""
+Uses a priority queue 
+Heuristic search
+Amins to reach the goal from the initial state through the shortest path, being an informed algorithm (Greedy)
+Uses two lists for tracking the traversal. 
+    Open list that keeps track of the current immediate nodes that are available to be searched 
+    Closed list that keeps tracks of the nodes that are already traversed"""
 
-        if next_node == target_node: 
-            path = [] 
-            # Backtrack to build path 
-            while next_node in parent: 
-                path.insert(0, next_node)  
-                next_node = parent[next_node] 
+# The Euclidean Hearistics function, for Best First Algorithms informed aspect 
+def Euclidean_heuristic(node, target):
+   x1, y1 = node 
+   x2, y2 = target 
+
+   return math.sqrt((x2 - x1)**2 + (y2 - y1)**2) 
+
+def best_first(graph, start_node, target_node):
+    openList = []
+    heapq.heappush(openList, (Euclidean_heuristic(start_node, target_node), start_node)) # adds item to the heap while maintaining the heap property 
+    closedList = set()
+    parent = {}
+
+    while openList:
+        _, top_node = heapq.heappop(openList) # removes and returns the smallest item from the heap, maintains the heap property 
+        closedList.add(top_node)
+
+        if top_node == target_node: 
+            path = [] # start building the acutal path 
+            while top_node in parent: 
+                path.insert(0, top_node)
+                top_node = parent[top_node]
             path.insert(0, start_node)
             return path 
         
-        # Haven't found target node, expand search space to neighboring nodes 
-        neighbors = graph.get(next_node, []) 
-        for n in neighbors: 
-            if n not in closedList and n not in openList: 
-                openList.append(n) 
-                parent[n] = next_node
+        for neighbor in graph.get(top_node, []):
+            if neighbor not in closedList:
+                if not any(neighbor == n for _, n in openList):
+                    parent[neighbor] = top_node
+                    heapq.heappush(openList, (Euclidean_heuristic(neighbor, target_node), neighbor))
 
-    return None 
+    return None
 
 """A* Search"""
 def a_star_generator(start, goal, graph, coordinates):
