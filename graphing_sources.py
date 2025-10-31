@@ -5,6 +5,7 @@ from collections import deque
 """Load the Adjacencies.txt file"""
 def load_graph(filename):
     graph = {}
+    weight = 1
     with open(filename, 'r') as file:
         for line in file: 
             a, b = line.strip().split() # collect the first and second city

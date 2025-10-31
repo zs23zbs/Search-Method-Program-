@@ -103,6 +103,7 @@ def best_first(graph, start_node, target_node, coordinates):
                 path.insert(0, current)
                 current = parent[current]
             path.insert(0, start_node)
+            return path
 
         for neighbor, _ in graph.get(top_node, []): # for neighboring nodes of top_node
             if neighbor not in closedList:
@@ -156,9 +157,8 @@ def A_star(graph, start_node, target_node, coordinates):
     return None
 
 def reconstructed_path(current_node, parent):
-    path = []
+    path = [current_node]
     while current_node in parent: 
         current_node = parent[current_node]
         path.insert(0, current_node)
-
     return path 
