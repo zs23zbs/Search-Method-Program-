@@ -112,7 +112,7 @@ def Eculidean_heuristic(node_id, target_id, coordinates):
     
     return math.sqrt((x2 - x1)**2 + (y2 - y1)**2) # return the calculated value of Euclidean distance 
 
-def best_first(graph, start_node, target_node, coordinates):
+"""def best_first(graph, start_node, target_node, coordinates):
     nodes_expanded = 0
     peak_memory_usage = 0
     
@@ -120,6 +120,7 @@ def best_first(graph, start_node, target_node, coordinates):
     h_start = Eculidean_heuristic(start_node, target_node, coordinates)
     heapq.heappush(openList, (h_start, start_node))
 
+    inside_openList = {start_node}
     closedList = set()
     parent = {}
 
@@ -140,7 +141,45 @@ def best_first(graph, start_node, target_node, coordinates):
                     parent[neighbor] = top_node
                     h_neighbor = Eculidean_heuristic(neighbor, target_node, coordinates) 
                     heapq.heappush(openList, (h_neighbor, neighbor)) # add neighbor to openList along with its calculated h value, ensure that lower h values (closer to target) are prioritized
-                    
+                    inside_openList.add(neighbor)
+
+    return None, nodes_expanded, peak_memory_usage
+"""
+
+def best_first(graph, start_node, target_node, coordinates):
+    nodes_expanded = 0
+    peak_memory_usage = 0
+    
+    h_start = Eculidean_heuristic(start_node, target_node, coordinates)
+    openList = [(h_start, start_node)]
+
+    closedList = set()
+    parent = {}
+
+    while openList:
+        current_memory = len(openList) + len(closedList)
+        peak_memory_usage = max(peak_memory_usage, current_memory)
+
+        _, current_node = heapq.heappop(openList)
+
+        if current_node in closedList:
+            continue 
+
+        nodes_expanded += 1
+        closedList.add(current_node)
+
+        if current_node == target_node:
+            path = reconstructed_path(current_node, parent)
+            return path, nodes_expanded, peak_memory_usage
+        
+        for neighbor, _ in graph.get(current_node, []):
+            if neighbor not in closedList:
+                h_neighbor = Eculidean_heuristic(neighbor, target_node, coordinates)
+                if neighbor not in parent: 
+                    parent[neighbor] = current_node
+
+                heapq.heappush(openList, (h_neighbor, neighbor))
+
     return None, nodes_expanded, peak_memory_usage
 
 """A* Search"""
@@ -188,9 +227,10 @@ def A_star(graph, start_node, target_node, coordinates):
                 g_score[neighbor] = tentative_g
 
                 h = Eculidean_heuristic(neighbor, target_node, coordinates)
-                f_score[neighbor] = tentative_g + h
+                new_f_score = tentative_g
+                f_score[neighbor] = new_f_score
 
-                heapq.heappush(OPENlist, (f_score[neighbor], neighbor))
+                heapq.heappush(OPENlist, (new_f_score, neighbor))
     
     return None, nodes_expanded, peak_memory_usage
 
