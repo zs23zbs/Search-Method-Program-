@@ -111,3 +111,12 @@ def best_first(graph, start_node, target_node, coordinates):
                     h_neighbor = Eculidean_heuristic(neighbor, target_node, coordinates) 
                     heapq.heappush(openList, (h_neighbor, neighbor)) # add neighbor to openList along with its calculated h value, ensure that lower h values (closer to target) are prioritized
     return None
+
+"""A* Search"""
+def A_star(graph, start_node, target_node, coordinates):
+    OPENlist = []
+    CLOSEDlist = set()
+
+    # Create the start and current nodes
+    g_score = {node: float('inf') for node in graph} # new dicionary to represent cost ('inf') of path from start to target
+    g_score[start_node] = 0 # cost for start_node is zero 
