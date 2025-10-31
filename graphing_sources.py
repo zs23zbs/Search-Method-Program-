@@ -68,3 +68,20 @@ def generate_random_weighted_graph(num_nodes=10, branching_factor=2, min_weight=
             graph[b].append((a, weight))
 
     return graph, coordinates 
+
+def is_graph_connected(graph):
+    if not graph: # just to check 
+        return False
+    
+    start = next(iter(graph))
+    visited = set()
+    queue = deque([start])
+    while queue: 
+        node = queue.popleft()
+        if node not in visited:
+            visited.add(node)
+            for neighbor, _ in graph[node]:
+                if neighbor not in visited:
+                    queue.appedn(neighbor)
+
+    return len(visited) == len(graph)
