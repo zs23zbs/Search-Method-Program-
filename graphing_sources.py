@@ -85,3 +85,27 @@ def is_graph_connected(graph):
                     queue.appedn(neighbor)
 
     return len(visited) == len(graph)
+
+def generate_connected_random_graph(num_nodes=10, branching_factor=2, min_weight=1, max_weight=10, seed=None):
+   """Generates a connected random graph and its coordinates"""
+  
+   local_random = random.Random(seed)
+   max_attempts = 100
+
+
+   for attempt in range(max_attempts):
+       current_seed = seed + attempt if seed is not None else local_random.randint(1, 10000)
+
+
+       # generate_random_weighted_graph MUST return (graph, coordinates)
+       graph, coordinates = generate_random_weighted_graph(
+           num_nodes, branching_factor, min_weight, max_weight, seed=current_seed
+       )
+      
+       if is_graph_connected(graph):
+           print(f"Random connected graph generated after {attempt + 1} attempt(s) with seed {current_seed}")
+           # Correct Return: Tuple of 2 values
+           return graph, coordinates
+      
+   print(f"Warning: Could not guarantee a connected graph after {max_attempts} attempts.")
+   # Correct Return (Failure Path): Must also return a Tuple of 2 values
