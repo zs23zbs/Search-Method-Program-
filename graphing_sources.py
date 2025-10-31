@@ -1,8 +1,9 @@
 import csv
 import random
+import math
 from collections import deque
 
-"""Load the Adjacencies.txt file"""
+"""Load the Adjacencies.txt file (set 1 data)"""
 def load_graph(filename):
     graph = {}
     weight = 1
@@ -20,7 +21,7 @@ def load_graph(filename):
 
     return graph
 
-"""Load the csv coordinates (1).txt file"""
+"""Load the csv coordinates (1).txt file  (set 1 data)"""
 def load_coordinates_csv(filename):
     coordinates = {}
     with open(filename, newline='') as csvfile:
@@ -32,6 +33,16 @@ def load_coordinates_csv(filename):
 
             coordinates[city] = (latitude, longitude) # assign the tuple values (latitude and longitude) to the city (key of pair) into coordinates dictionary
     return coordinates
+
+def eculidean_h(coord1, coord2):
+    x1, y1 = coord1
+    x2, y2 = coord2
+
+    return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+
+"""KC Metra Data (set 2 data)"""
+def load_kc_metro_graphs(node_file, edge_file):
+    pass
 
 """For random graph generator"""
 def generate_random_weighted_graph(num_nodes=10, branching_factor=2, min_weight=1, max_weight=10, seed=None):
