@@ -7,11 +7,9 @@ def bfs(graph, root, target):
     nodes_expanded = 0
     peak_memory_usage = 0
     
-    visited_nodes = set() # Set of nodes that have been visted, no duplicates 
-    visit_order = [] 
-    queue = deque() # To put nodes in when being visited, top of the queue is of highest priority
-
-    queue.append(root) # Starting with searching the root of tree, put into queue
+    visited_nodes = {root} # Set of nodes that have been visted, no duplicates 
+    queue = deque([root]) # To put nodes in when being visited, top of the queue is of highest priority
+    parent = {}
 
     while queue: # while there are still nodes to search for, put into visit order + add as visited nodes
         current_memory = len(queue) + len(visited_nodes)
@@ -19,11 +17,15 @@ def bfs(graph, root, target):
 
         node = queue.popleft()
         nodes_expanded += 1
-        visit_order.append(node)
-        visited_nodes.add(node) 
 
-        for child in graph.get(node, []): # iterate through the child nodes of the ones that are visited
+        if node == target: 
+            path = reconstructed_path(node, parent)
+            return path, nodes_expanded, peak_memory_usage
+
+        for child, _ in graph.get(node, []): # iterate through the child nodes of the ones that are visited
             if child not in visited_nodes:
+                visited_nodes.add(child)
+                parent[child] = node
                 queue.append(child) 
 
     return None, nodes_expanded, peak_memory_usage # should return the order of which the nodes were visited 
@@ -33,58 +35,70 @@ def dfs(graph, root_node, target):
     nodes_expanded = 0
     peak_memory_usage = 0
 
-    traversal_list = [] # container for traversal sequence
     nodes_visited = set() # container for all the nodes that've been visited 
-    stack = [root_node] #Initiate "stack" with the root of search tree (LIFO)
+    stack = [(root_node, None)] #Initiate "stack" with the root of search tree (LIFO)
+    parent = {}
 
     while stack: # while there are nodes to visit
         current_memory = len(stack) + len(nodes_visited)
         peak_memory_usage = max(peak_memory_usage, current_memory)
 
-        new_node = stack.pop() 
+        new_node, parent_node  = stack.pop() 
+
         if new_node not in nodes_visited: 
-            traversal_list.append(new_node) 
-            nodes_expanded += 1
-            nodes_visited.add(new_node) 
+            nodes_expanded += 1 # <--- ADDED (Node is expanded)
+            nodes_visited.add(new_node)
+
+            if parent_node is not None: 
+                parent[new_node] = parent_node
+
+            if new_node == target:
+                path = reconstructed_path(new_node, parent)
+                return path, nodes_expanded, peak_memory_usage
         
             for adjacent_nodes in reversed(graph.get(new_node, [])): # ensures LIFO by looking at child/leaf nodes backwards in the search_tree
                 if adjacent_nodes not in nodes_visited:
-                    stack.append(adjacent_nodes) 
+                    stack.append((adjacent_nodes, new_node)) 
 
     return None, nodes_expanded, peak_memory_usage
 
 """Iterative Deepening Depth First Search""" 
-def DLS(graph, start, target, limit): # Funciton to prevent the algorithm to search too deep into the search space, prevent unecessary searching
-    explored = set() # keeps tracks of hte nodes that are visited to avoid of cycles, should reset at each depth 
+def DLS(graph, start, target, limit, visitied_path): 
+    if limit < 0:
+        return None, 0
+    if start == target:
+        return [start], 1
+    
+    visitied_path.add(start) # track the path visited thus far
 
-    def helper(node, depth): 
-        if depth < 0: # if depth is a negative number, prevents recursions from the function going any deeper than needed 
-            return None
-        
-        if node == target: # if the target node is found in search 
-            return [node] # return the path explored from the target node (used for backtracking)
-        
-        explored.add(node)
+    expanded_in_depth = 1
 
-        for neighbor in graph.get(node, []): 
-            if neighbor not in explored: 
-                path = helper(neighbor, depth - 1) # For each neighbor not explored yet at current depth, recurse the depth by decreasing by 1
-                if path is not None:
-                    return [node] + path # build the now found path from start to target node 
-            
-        return None 
-        
-    return helper(start, limit - 1) 
+    for neighbor, _ in graph.get(start, []): 
+        if neighbor not in visitied_path: 
+            path, expanded_sub = DLS(graph, neighbor, target, limit - 1, visitied_path)
+            expanded_in_depth += expanded_sub
 
+            if path is not None:
+                return [start] + path, expanded_in_depth
+    visitied_path.remove(start)
+    return None, expanded_in_depth
+ 
 def iddfs(graph,start, target, depth_limit):
+    total_expanded = 0
+
     for depth in range(depth_limit + 1): # iteratively increaed the depth limit
-        result = DLS(graph, start, target, depth) # At each depth, call the DLS function 
-        if result is not None:
-            return result  # returning the path if target is found
-    return None
+        visited_path = set()
+
+        result_path, expanded_in_depth = DLS(graph, start, target, depth, visited_path)
+        total_expanded += expanded_in_depth 
+
+        if result_path is not None:
+            peak_memory_prox = depth
+            return result_path, total_expanded, peak_memory_prox
+        
+    return None, total_expanded
 
 """Best-First Search"""
-
 #Heuristic Function - Using the Euclidean Distance 
 def Eculidean_heuristic(node_id, target_id, coordinates):
     # Just in case, handle any errors 
