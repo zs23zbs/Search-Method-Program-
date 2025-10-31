@@ -113,6 +113,9 @@ def Eculidean_heuristic(node_id, target_id, coordinates):
     return math.sqrt((x2 - x1)**2 + (y2 - y1)**2) # return the calculated value of Euclidean distance 
 
 def best_first(graph, start_node, target_node, coordinates):
+    nodes_expanded = 0
+    peak_memory_usage = 0
+    
     openList = [] 
     h_start = Eculidean_heuristic(start_node, target_node, coordinates)
     heapq.heappush(openList, (h_start, start_node))
@@ -121,17 +124,15 @@ def best_first(graph, start_node, target_node, coordinates):
     parent = {}
 
     while openList:
+        current_memory = len(openList) + len(closedList)
+        peak_memory_usage = max(peak_memory_usage, current_memory)
+
         _, top_node = heapq.heappop(openList) # removing based on heurisitc value, one's closer to the goal  
         closedList.add(top_node)
 
         if top_node == target_node: # if target node is found, make a new path from target to start and use parent to move backwards to create start to target path order
-            path = []
-            current = top_node 
-            while current in parent: 
-                path.insert(0, current)
-                current = parent[current]
-            path.insert(0, start_node)
-            return path
+            path = reconstructed_path(top_node, parent)
+            return path, nodes_expanded, peak_memory_usage)
 
         for neighbor, _ in graph.get(top_node, []): # for neighboring nodes of top_node
             if neighbor not in closedList:
@@ -139,7 +140,7 @@ def best_first(graph, start_node, target_node, coordinates):
                     parent[neighbor] = top_node
                     h_neighbor = Eculidean_heuristic(neighbor, target_node, coordinates) 
                     heapq.heappush(openList, (h_neighbor, neighbor)) # add neighbor to openList along with its calculated h value, ensure that lower h values (closer to target) are prioritized
-    return None
+    return None, nodes_expanded, peak_memory_usage
 
 """A* Search"""
 def A_star(graph, start_node, target_node, coordinates):
