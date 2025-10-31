@@ -15,10 +15,10 @@ def bfs(graph, root, target):
 
     while queue: # while there are still nodes to search for, put into visit order + add as visited nodes
         current_memory = len(queue) + len(visited_nodes)
-        if current_memory > peak_memory_usage:
-            peak_memory_usage = current_memory
+        peak_memory_usage = max(peak_memory_usage, current_memory)
 
         node = queue.popleft()
+        nodes_expanded += 1
         visit_order.append(node)
         visited_nodes.add(node) 
 
@@ -29,22 +29,29 @@ def bfs(graph, root, target):
     return None, nodes_expanded, peak_memory_usage # should return the order of which the nodes were visited 
 
 """Depth First Search Function"""
-def dfs(graph, root_node):
+def dfs(graph, root_node, target):
+    nodes_expanded = 0
+    peak_memory_usage = 0
+
     traversal_list = [] # container for traversal sequence
     nodes_visited = set() # container for all the nodes that've been visited 
     stack = [root_node] #Initiate "stack" with the root of search tree (LIFO)
 
     while stack: # while there are nodes to visit
+        current_memory = len(stack) + len(nodes_visited)
+        peak_memory_usage = max(peak_memory_usage, current_memory)
+
         new_node = stack.pop() 
         if new_node not in nodes_visited: 
             traversal_list.append(new_node) 
+            nodes_expanded += 1
             nodes_visited.add(new_node) 
         
             for adjacent_nodes in reversed(graph.get(new_node, [])): # ensures LIFO by looking at child/leaf nodes backwards in the search_tree
                 if adjacent_nodes not in nodes_visited:
                     stack.append(adjacent_nodes) 
 
-    return traversal_list
+    return None, nodes_expanded, peak_memory_usage
 
 """Iterative Deepening Depth First Search""" 
 def DLS(graph, start, target, limit): # Funciton to prevent the algorithm to search too deep into the search space, prevent unecessary searching
