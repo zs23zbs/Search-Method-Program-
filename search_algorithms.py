@@ -120,3 +120,26 @@ def A_star(graph, start_node, target_node, coordinates):
     # Create the start and current nodes
     g_score = {node: float('inf') for node in graph} # new dicionary to represent cost ('inf') of path from start to target
     g_score[start_node] = 0 # cost for start_node is zero 
+
+    # Total estimated cost, help decided which path to explore 
+    f_score = {node: float('inf') for node in graph}
+    f_score[start_node] = Eculidean_heuristic(start_node, target_node, coordinates) 
+
+    heapq.heappush(OPENlist, (f_score[start_node], start_node))
+    parent = {}
+
+    while len(OPENlist) > 0: # make sure the list is not empty
+        current_f, current_node = heapq.heappop(OPENlist)
+
+        if current_node == target_node: 
+            return reconstructed_path(current_node, parent)
+        
+
+
+def reconstructed_path(current_node, parent):
+    path = []
+    while current_node in parent: 
+        current_node = parent[current_node]
+        path.insert(0, current_node)
+
+    return path 
