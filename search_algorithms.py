@@ -3,7 +3,10 @@ import heapq # to help with the priority queue
 import math
 
 """Breadth First Search Function""" 
-def bfs(graph, root):
+def bfs(graph, root, target):
+    nodes_expanded = 0
+    peak_memory_usage = 0
+    
     visited_nodes = set() # Set of nodes that have been visted, no duplicates 
     visit_order = [] 
     queue = deque() # To put nodes in when being visited, top of the queue is of highest priority
@@ -11,6 +14,10 @@ def bfs(graph, root):
     queue.append(root) # Starting with searching the root of tree, put into queue
 
     while queue: # while there are still nodes to search for, put into visit order + add as visited nodes
+        current_memory = len(queue) + len(visited_nodes)
+        if current_memory > peak_memory_usage:
+            peak_memory_usage = current_memory
+
         node = queue.popleft()
         visit_order.append(node)
         visited_nodes.add(node) 
@@ -19,7 +26,7 @@ def bfs(graph, root):
             if child not in visited_nodes:
                 queue.append(child) 
 
-    return visit_order # should return the order of which the nodes were visited 
+    return None, nodes_expanded, peak_memory_usage # should return the order of which the nodes were visited 
 
 """Depth First Search Function"""
 def dfs(graph, root_node):
