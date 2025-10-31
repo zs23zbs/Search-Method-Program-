@@ -131,7 +131,8 @@ def generate_connected_random_graph(num_nodes=10, branching_factor=2, min_weight
   
    local_random = random.Random(seed)
    max_attempts = 100
-
+   
+   graph, coordinates = {}, {} # intialize the failuar return path 
 
    for attempt in range(max_attempts):
        current_seed = seed + attempt if seed is not None else local_random.randint(1, 10000)
@@ -148,4 +149,5 @@ def generate_connected_random_graph(num_nodes=10, branching_factor=2, min_weight
            return graph, coordinates
       
    print(f"Warning: Could not guarantee a connected graph after {max_attempts} attempts.")
-   # Correct Return (Failure Path): Must also return a Tuple of 2 values
+   
+   return graph, coordinates
