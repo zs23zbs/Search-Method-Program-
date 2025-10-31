@@ -103,3 +103,11 @@ def best_first(graph, start_node, target_node, coordinates):
                 path.insert(0, current)
                 current = parent[current]
             path.insert(0, start_node)
+
+        for neighbor, _ in graph.get(top_node, []): # for neighboring nodes of top_node
+            if neighbor not in closedList:
+                if not any(neighbor == n for _, n in openList): # if not any node in openList whose node is equal to neighbor
+                    parent[neighbor] = top_node
+                    h_neighbor = Eculidean_heuristic(neighbor, target_node, coordinates) 
+                    heapq.heappush(openList, (h_neighbor, neighbor)) # add neighbor to openList along with its calculated h value, ensure that lower h values (closer to target) are prioritized
+    return None
