@@ -56,7 +56,7 @@ def dfs(graph, root_node, target):
                 path = reconstructed_path(new_node, parent)
                 return path, nodes_expanded, peak_memory_usage
         
-            for adjacent_nodes in reversed(graph.get(new_node, [])): # ensures LIFO by looking at child/leaf nodes backwards in the search_tree
+            for adjacent_nodes, _ in reversed(graph.get(new_node, [])): # ensures LIFO by looking at child/leaf nodes backwards in the search_tree
                 if adjacent_nodes not in nodes_visited:
                     stack.append((adjacent_nodes, new_node)) 
 
@@ -96,7 +96,7 @@ def iddfs(graph,start, target, depth_limit):
             peak_memory_prox = depth
             return result_path, total_expanded, peak_memory_prox
         
-    return None, total_expanded
+    return None, total_expanded, 0
 
 """Best-First Search"""
 #Heuristic Function - Using the Euclidean Distance 
@@ -132,7 +132,7 @@ def best_first(graph, start_node, target_node, coordinates):
 
         if top_node == target_node: # if target node is found, make a new path from target to start and use parent to move backwards to create start to target path order
             path = reconstructed_path(top_node, parent)
-            return path, nodes_expanded, peak_memory_usage)
+            return path, nodes_expanded, peak_memory_usage
 
         for neighbor, _ in graph.get(top_node, []): # for neighboring nodes of top_node
             if neighbor not in closedList:
@@ -140,6 +140,7 @@ def best_first(graph, start_node, target_node, coordinates):
                     parent[neighbor] = top_node
                     h_neighbor = Eculidean_heuristic(neighbor, target_node, coordinates) 
                     heapq.heappush(openList, (h_neighbor, neighbor)) # add neighbor to openList along with its calculated h value, ensure that lower h values (closer to target) are prioritized
+                    
     return None, nodes_expanded, peak_memory_usage
 
 """A* Search"""
@@ -169,7 +170,7 @@ def A_star(graph, start_node, target_node, coordinates):
         nodes_expanded += 1
 
         if current_node == target_node: 
-            return reconstructed_path(current_node, parent)
+            return reconstructed_path(current_node, parent), nodes_expanded, peak_memory_usage
 
         if current_node in CLOSEDlist:
             continue 
@@ -190,6 +191,7 @@ def A_star(graph, start_node, target_node, coordinates):
                 f_score[neighbor] = tentative_g + h
 
                 heapq.heappush(OPENlist, (f_score[neighbor], neighbor))
+    
     return None, nodes_expanded, peak_memory_usage
 
 def reconstructed_path(current_node, parent):

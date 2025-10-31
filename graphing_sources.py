@@ -42,7 +42,35 @@ def eculidean_h(coord1, coord2):
 
 """KC Metra Data (set 2 data)"""
 def load_kc_metro_graphs(node_file, edge_file):
-    pass
+    coordinates = {}
+    graph = {}
+
+    # taking the nodes and coordinates from contents of file 
+    with open(node_file, newline='') as csvfile:
+        reader = csv.reader(csvfile)
+        next(reader) # skipping the header
+        for row in reader: 
+            node_id = int(row[0]) # getting the city 
+            lat, long = float(row[1]), float(row[2])
+            coordinates[node_id] = (lat, long)
+            graph[node_id] = []
+
+    # taking the edges and calculated weights
+    with open(edge_file, newline='') as csvFILE:
+        reader = csv.reader(csvFILE)
+        next(reader) 
+        for row in reader:
+            node1 = int(row[0])
+            node2 = int(row[1])
+
+            coord1 = coordinates[node1]
+            coord2 = coordinates[node2]
+
+            weight = eculidean_h(coord1, coord2) # calculating the weight using heuristics
+
+            graph[node1].append((node2, weight))
+            graph[node2].append((node1, weight))
+    return graph, coordinates
 
 """For random graph generator"""
 def generate_random_weighted_graph(num_nodes=10, branching_factor=2, min_weight=1, max_weight=10, seed=None):
