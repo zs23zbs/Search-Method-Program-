@@ -144,6 +144,9 @@ def best_first(graph, start_node, target_node, coordinates):
 
 """A* Search"""
 def A_star(graph, start_node, target_node, coordinates):
+    nodes_expanded = 0 
+    peak_memory_usage = 0
+
     OPENlist = []
     CLOSEDlist = set()
 
@@ -159,7 +162,11 @@ def A_star(graph, start_node, target_node, coordinates):
     parent = {}
 
     while len(OPENlist) > 0: # make sure the list is not empty
+        current_memory = len(OPENlist) + len(CLOSEDlist) # <--- ADDED/CHANGED
+        peak_memory_usage = max(peak_memory_usage, current_memory)
+
         current_f, current_node = heapq.heappop(OPENlist)
+        nodes_expanded += 1
 
         if current_node == target_node: 
             return reconstructed_path(current_node, parent)
@@ -183,7 +190,7 @@ def A_star(graph, start_node, target_node, coordinates):
                 f_score[neighbor] = tentative_g + h
 
                 heapq.heappush(OPENlist, (f_score[neighbor], neighbor))
-    return None
+    return None, nodes_expanded, peak_memory_usage
 
 def reconstructed_path(current_node, parent):
     path = [current_node]
