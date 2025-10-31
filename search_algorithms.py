@@ -133,8 +133,27 @@ def A_star(graph, start_node, target_node, coordinates):
 
         if current_node == target_node: 
             return reconstructed_path(current_node, parent)
-        
 
+        if current_node in CLOSEDlist:
+            continue 
+
+        CLOSEDlist.add(current_node)
+
+        for neighbor, weigth in graph.get(current_node, []):
+            if neighbor in CLOSEDlist: 
+                continue 
+
+            tentative_g = g_score[current_node] + weigth # g(n) = cost to reach the curent node + move cost to the neighbor 
+
+            if tentative_g < g_score.get(neighbor, float('inf')): # check if path is better to explore
+                parent[neighbor] = current_node
+                g_score[neighbor] = tentative_g
+
+                h = Eculidean_heuristic(neighbor, target_node, coordinates)
+                f_score[neighbor] = tentative_g + h
+
+                heapq.heappush(OPENlist, (f_score[neighbor], neighbor))
+    return None
 
 def reconstructed_path(current_node, parent):
     path = []
