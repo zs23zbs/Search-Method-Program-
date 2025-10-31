@@ -50,18 +50,18 @@ def generate_random_weighted_graph(num_nodes=10, branching_factor=2, min_weight=
         weight = random.randint(min_weight, max_weight)
 
         # make an edge from node to connect_to 
-        graph[node].append(connect_to, weight)
+        graph[node].append((connect_to, weight))
 
         # make an edge from connect_to to node 
         if not any(entry[0] == node for entry in graph[connect_to]):
-            graph[connect_to].append(node, weight)
+            graph[connect_to].append((node, weight))
 
     target_edges = int(num_nodes * branching_factor /2)
-    current_edges = sum(len(graph[i]) for i in range(num_nodes) // 2) # count the unique edges 
+    current_edges = sum(len(graph[i]) for i in range(num_nodes)) // 2 # count the unique edges 
     edges_to_add = max(0, target_edges - current_edges)
 
     for _ in range(edges_to_add):
-        a, b = random.smaple(range(num_nodes), 2)
+        a, b = random.sample(range(num_nodes), 2)
         weigth = random.randint(min_weight, max_weight)
         if a != b and b not in [n for n, _ in graph[a]]:
             graph[a].append((b, weight))
@@ -82,7 +82,7 @@ def is_graph_connected(graph):
             visited.add(node)
             for neighbor, _ in graph[node]:
                 if neighbor not in visited:
-                    queue.appedn(neighbor)
+                    queue.append(neighbor)
 
     return len(visited) == len(graph)
 
