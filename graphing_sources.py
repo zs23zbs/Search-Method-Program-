@@ -1,4 +1,6 @@
 import csv
+import random
+from collections import deque
 
 """Load the Adjacencies.txt file"""
 def load_graph(filename):
@@ -27,4 +29,42 @@ def load_coordinates_csv(filename):
             latitude = float(row[1])
             longitude = float(row[2])
 
-            coordinates[city] = (latitude, longitude) # assign the tuple values (latitude and longitude) to the city (key of pair) into coordinates dictionary 
+            coordinates[city] = (latitude, longitude) # assign the tuple values (latitude and longitude) to the city (key of pair) into coordinates dictionary
+    return coordinates
+
+"""For random graph generator"""
+def generate_random_weighted_graph(num_nodes=10, branching_factor=2, min_weight=1, max_weight=10, seed=None):
+    if seed is not None:
+        random.seed(seed)
+    
+    graph = {i: [] for i in range(num_nodes)} # created some isolated nodes
+
+    coordinates = {
+        node: (random.randint(0, 1000), random.randint(0, 1000))
+        for node in range(num_nodes)
+    }
+
+    # makes sure that the graph is connected 
+    for node in range(1, num_nodes):
+        connect_to =random.randint(0, node - 1)
+        weight = random.randint(min_weight, max_weight)
+
+        # make an edge from node to connect_to 
+        graph[node].append(connect_to, weight)
+
+        # make an edge from connect_to to node 
+        if not any(entry[0] == node for entry in graph[connect_to]):
+            graph[connect_to].append(node, weight)
+
+    target_edges = int(num_nodes * branching_factor /2)
+    current_edges = sum(len(graph[i]) for i in range(num_nodes) // 2) # count the unique edges 
+    edges_to_add = max(0, target_edges - current_edges)
+
+    for _ in range(edges_to_add):
+        a, b = random.smaple(range(num_nodes), 2)
+        weigth = random.randint(min_weight, max_weight)
+        if a != b and b not in [n for n, _ in graph[a]]:
+            graph[a].append((b, weight))
+            graph[b].append((a, weight))
+
+    return graph, coordinates 
