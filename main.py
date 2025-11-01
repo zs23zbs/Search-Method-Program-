@@ -76,10 +76,19 @@ def visual_graph(graph, coordinates, path, filename="A_star_visual_path.png"):
     plt.savefig(filename)
     print(f"\n+++ Visualization was successfully saved to {filename} +++")
 
-SEARCH_ALGORITHMS = {
+search_algorithms = {
    "BFS": {'func': bfs, 'informed': False},
    "DFS": {'func': dfs, 'informed': False},
    "IDDFS": {'func': iddfs, 'informed': False},
    "Best-First": {'func': best_first, 'informed': True},
    "A*": {'func': A_star, 'informed': True},
 }
+
+# Setting up the benchmarking 
+benchmark_settings = {
+   "Easy": {"N_nodes": 20, "B_factor": 2, "N_runs": 5},
+   "Medium": {"N_nodes": 50, "B_factor": 3, "N_runs": 5},
+   "Hard": {"N_nodes": 100, "B_factor": 4, "N_runs": 5},
+}
+
+start_seed = 100
