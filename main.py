@@ -30,7 +30,7 @@ def calculate_path_cost(graph, path):
     
     return total_cost
 
-"""The Visualization Function"""
+"""The Visualization Function"""  # Function made with help from AI, had the most difficulty without so 
 def visual_graph(graph, coordinates, path, filename="A_star_visual_path.png"):
     G = nx.Graph()
     edge_weights = {}
@@ -93,8 +93,7 @@ benchmark_settings = {
 
 start_seed = 100
 
-def run_benchmark():
-   """Runs the full benchmarking process and prints the results."""
+def run_benchmark(): # Function made with help from AI
   
    results = {}
   
@@ -232,8 +231,8 @@ if __name__ == "__main__":
        print(f"Best-First Path: {best_first_path}")
        print(f"Best-First Path Cost: {best_first_cost:.2f}")  
 
-       # make the visualization 
+       # call the visualization 
        visual_graph(random_graph, random_coordinates, a_star_path,"A_star_visual_path.png")
 
-       # running the batch benchmarking 
+       # running the benchmarking 
        run_benchmark()

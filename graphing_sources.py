@@ -126,7 +126,7 @@ def is_graph_connected(graph):
 
     return len(visited) == len(graph)
 
-def generate_connected_random_graph(num_nodes=10, branching_factor=2, min_weight=1, max_weight=10, seed=None):
+def generate_connected_random_graph(num_nodes=10, branching_factor=2, min_weight=1, max_weight=10, seed=None):  # Function made with help from AI
    """Generates a connected random graph and its coordinates"""
   
    local_random = random.Random(seed)
