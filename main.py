@@ -92,3 +92,102 @@ benchmark_settings = {
 }
 
 start_seed = 100
+
+def run_benchmark():
+   """Runs the full benchmarking process and prints the results."""
+  
+   results = {}
+  
+   print("\n\n" + "="*80)
+   print("--- Starting Batch Benchmarking on Random Graphs ---")
+   print("="*80)
+
+
+   for setting_name, config in benchmark_settings.items():
+       print(f"\nRunning setting: {setting_name} (Nodes: {config['N_nodes']}, Branching: {config['B_factor']})")
+      
+       setting_results = {alg_name: {'runtime': [], 'expanded': [], 'memory': [], 'cost': []}
+                          for alg_name in search_algorithms}
+      
+       for run_id in range(config['N_runs']):
+           current_seed = start_seed + run_id
+          
+           graph, coordinates = generate_connected_random_graph( # create the graph
+               num_nodes=config['N_nodes'],
+               min_weight=2,
+               max_weight=10,
+               branching_factor=config['B_factor'],
+               seed=current_seed
+           )
+          
+           start_node = 0
+           target_node = config['N_nodes'] - 1
+
+
+           if not graph:
+               print(f"Skipping run {run_id}: Graph generation failed.")
+               continue
+
+           for alg_name, alg_config in search_algorithms.items(): # run the algorithms 
+               algorithm = alg_config['func']
+               is_informed = alg_config['informed']
+
+
+               start_time = time.time()
+              
+               if is_informed:
+                   path, expanded, memory = algorithm(graph, start_node, target_node, coordinates)
+               else:
+                   if alg_name == "IDDFS":  # deal with IDDFS's extra depth_limit
+                       path, expanded, memory = algorithm(graph, start_node, target_node, config['N_nodes'])
+                   else:
+                       path, expanded, memory = algorithm(graph, start_node, target_node)
+              
+               end_time = time.time()
+               runtime = (end_time - start_time) * 1000 # Convert to milliseconds
+
+
+               cost = calculate_path_cost(graph, path) if path else float('inf')
+
+
+               setting_results[alg_name]['runtime'].append(runtime)
+               setting_results[alg_name]['expanded'].append(expanded)
+               setting_results[alg_name]['memory'].append(memory)
+               setting_results[alg_name]['cost'].append(cost)
+
+
+       results[setting_name] = setting_results # the average + result of running the setting
+
+
+   # process and display the results 
+   print("\n\n" + "="*80)
+   print("FINAL BENCHMARK RESULTS (Mean ± Std Dev)")
+   print("="*80)
+  
+   for setting_name, setting_results in results.items(): # calculating + printing the stats for each setting 
+       print(f"\n--- Complexity Setting: {setting_name} ---")
+       header = f"{'Algorithm':<12} | {'Runtime (ms)':<20} | {'Nodes Expanded':<20} | {'Peak Memory (Units)':<20} | {'Path Cost':<10}"
+       print('-' * len(header))
+       print(header)
+       print('-' * len(header))
+
+
+       for alg_name, metrics in setting_results.items():
+          
+           def safe_stats(data):
+               if not data: return "N/A"
+               mean = statistics.mean(data)
+               stdev = statistics.stdev(data) if len(data) > 1 else 0.0
+               return f"{mean:.2f} ± {stdev:.2f}"
+
+
+           runtime_stats = safe_stats(metrics['runtime'])
+           expanded_stats = safe_stats(metrics['expanded'])
+           memory_stats = safe_stats(metrics['memory'])
+          
+           # taking the mean of the runs for the cost
+           successful_costs = [c for c in metrics['cost'] if c != float('inf')]
+           mean_cost = statistics.mean(successful_costs) if successful_costs else "Inf"
+
+
+           print(f"{alg_name:<12} | {runtime_stats:<20} | {expanded_stats:<20} | {memory_stats:<20} | {mean_cost:<10}")
