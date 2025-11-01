@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 
 def generate_benchmark_chart(): # Function made with the help of AI, benchmarking inputs made from running main.py file
     # Data from the Hard Complexity setting in your final output:
+    
     algorithms = ['BFS', 'DFS', 'IDDFS', 'Best-First', 'A*']
     
     # input for the mean nodes expanded for Hard setting:

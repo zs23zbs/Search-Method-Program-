@@ -46,11 +46,10 @@ def visual_graph(graph, coordinates, path, filename="A_star_visual_path.png"): #
     if path: 
         for node in path:
             if node in coordinates:
-                node_colors[node] = 'orange'
-
-        # identifying the start and target nodes being different 
-        if path[0] in coordinates: node_colors[path[0]] = 'green'
-        if path[-1] in coordinates: node_colors[path[-1]] = 'red'
+                node_colors[node] = 'orange' # nodes that are part of the optimal path but not either the start or target
+ 
+        if path[0] in coordinates: node_colors[path[0]] = 'green' # start node
+        if path[-1] in coordinates: node_colors[path[-1]] = 'red' # target node
  
     path_edges = [(path[i], path[i+1]) for i in range(len(path)-1)] # the path edges
 
@@ -58,7 +57,7 @@ def visual_graph(graph, coordinates, path, filename="A_star_visual_path.png"): #
     edge_widths = []
     for u, v in G.edges():
         is_path_edge = (u, v) in path_edges or (v, u) in path_edges # check if the edges (u, v) or (v, u) is in path 
-        edge_colors.append('purple' if is_path_edge else 'gray')
+        edge_colors.append('purple' if is_path_edge else 'gray') # purple = optimal path, gray = remaining connections 
         edge_widths.append(3 if is_path_edge else 1)
     
     plt.figure(figsize=(12, 8))
