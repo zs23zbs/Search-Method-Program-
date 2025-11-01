@@ -3,6 +3,9 @@ import statistics
 import matplotlib.pyplot as plt
 import networkx as nx
 
+from search_algorithms import bfs, dfs, iddfs, best_first, A_star
+from graphing_sources import generate_connected_random_graph
+
 def calculate_path_cost(graph, path):
     if not path or len(path) < 2:
         return 0.0 
@@ -72,3 +75,11 @@ def visual_graph(graph, coordinates, path, filename="A_star_visual_path.png"):
     plt.axis('off')
     plt.savefig(filename)
     print(f"\n+++ Visualization was successfully saved to {filename} +++")
+
+SEARCH_ALGORITHMS = {
+   "BFS": {'func': bfs, 'informed': False},
+   "DFS": {'func': dfs, 'informed': False},
+   "IDDFS": {'func': iddfs, 'informed': False},
+   "Best-First": {'func': best_first, 'informed': True},
+   "A*": {'func': A_star, 'informed': True},
+}
