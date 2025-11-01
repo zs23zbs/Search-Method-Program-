@@ -191,3 +191,46 @@ def run_benchmark():
 
 
            print(f"{alg_name:<12} | {runtime_stats:<20} | {expanded_stats:<20} | {memory_stats:<20} | {mean_cost:<10}")
+
+if __name__ == "__main__":
+   seed = 42
+   Nnodes = 50
+   Bfactor = 3
+   start_node_id = 0
+   target_node_id = Nnodes - 1
+
+   random_graph, random_coordinates = generate_connected_random_graph(
+       num_nodes=Nnodes,
+       min_weight=2,
+       max_weight=10,
+       branching_factor=Bfactor,
+       seed=seed
+   )
+
+   if random_graph:
+       # A* search for path visualization 
+       a_star_results = A_star(
+           random_graph,
+           start_node_id,
+           target_node_id,
+           random_coordinates
+       )
+       a_star_path, _, _ = a_star_results
+       a_star_cost = calculate_path_cost(random_graph, a_star_path)
+       print(f"A* Path: {a_star_path}")
+       print(f"A* Path Cost: {a_star_cost:.2f}")
+
+       # best_first for comparisons
+       best_first_results = best_first(
+           random_graph,
+           start_node_id,
+           target_node_id,
+           random_coordinates
+       )
+       best_first_path, _, _ = best_first_results
+       best_first_cost = calculate_path_cost(random_graph, best_first_path)
+       print(f"Best-First Path: {best_first_path}")
+       print(f"Best-First Path Cost: {best_first_cost:.2f}")  
+
+       # make the visualization 
+       visual_graph(random_graph, random_coordinates, a_star_path,"A_star_visual_path.png")
