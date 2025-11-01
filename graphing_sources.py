@@ -116,6 +116,7 @@ def is_graph_connected(graph):
     start = next(iter(graph))
     visited = set()
     queue = deque([start])
+    
     while queue: 
         node = queue.popleft()
         if node not in visited:

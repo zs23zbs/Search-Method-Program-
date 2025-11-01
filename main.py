@@ -18,8 +18,7 @@ def calculate_path_cost(graph, path):
 
         found_weight = False 
 
-        #find the weight of the edge from the current node to the next one
-        for neighbor, weight in graph.get(current_node, []):
+        for neighbor, weight in graph.get(current_node, []): # find the weight of the edge from the current node to the next one
             if neighbor == next_node: 
                 total_cost += weight
                 found_weight = True
@@ -30,8 +29,8 @@ def calculate_path_cost(graph, path):
     
     return total_cost
 
-"""The Visualization Function"""  # Function made with help from AI, had the most difficulty without so 
-def visual_graph(graph, coordinates, path, filename="A_star_visual_path.png"):
+"""The Visualization Function"""  
+def visual_graph(graph, coordinates, path, filename="A_star_visual_path.png"): # Function made with help from AI, had the most difficulty without so 
     G = nx.Graph()
     edge_weights = {}
 
@@ -41,11 +40,9 @@ def visual_graph(graph, coordinates, path, filename="A_star_visual_path.png"):
                 G.add_edge(node, neighbor, weight=weight)
                 edge_weights[(node, neighbor)] = f"{weight:.1f}"
     
-    # Find the node positions (using the coordinates)
-    pos = coordinates
+    pos = coordinates # find the node positions (with the coordinates)
 
-    # Take care of the colors and labels 
-    node_colors = ['lightblue' for _ in range(len(coordinates))]
+    node_colors = ['lightblue' for _ in range(len(coordinates))] # take care of the colors and labels 
     if path: 
         for node in path:
             if node in coordinates:
@@ -54,9 +51,8 @@ def visual_graph(graph, coordinates, path, filename="A_star_visual_path.png"):
         # identifying the start and target nodes being different 
         if path[0] in coordinates: node_colors[path[0]] = 'green'
         if path[-1] in coordinates: node_colors[path[-1]] = 'red'
-
-    # the path edges 
-    path_edges = [(path[i], path[i+1]) for i in range(len(path)-1)]
+ 
+    path_edges = [(path[i], path[i+1]) for i in range(len(path)-1)] # the path edges
 
     edge_colors = []
     edge_widths = []
@@ -74,7 +70,7 @@ def visual_graph(graph, coordinates, path, filename="A_star_visual_path.png"):
     plt.title(f"A* Path Visualization (Cost: {calculate_path_cost(graph, path) :.2f})")
     plt.axis('off')
     plt.savefig(filename)
-    print(f"\n+++ Visualization was successfully saved to {filename} +++")
+    print(f"\n+++ Visualization was successfully saved to {filename} +++") # make sure that the file is said with file
 
 search_algorithms = {
    "BFS": {'func': bfs, 'informed': False},
@@ -160,7 +156,7 @@ def run_benchmark(): # Function made with help from AI
 
    # process and display the results 
    print("\n\n" + "="*80)
-   print("FINAL BENCHMARK RESULTS (Mean ± Std Dev)")
+   print("FINAL BENCHMARK RESULTS:")
    print("="*80)
   
    for setting_name, setting_results in results.items(): # calculating + printing the stats for each setting 

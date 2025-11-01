@@ -1,21 +1,14 @@
 import matplotlib.pyplot as plt
-import numpy as np
 
-"""Warning!!!: AI Generated Chart, with given input from benchmarking"""
-
-def generate_benchmark_chart():
-    """
-    Generates a bar chart comparing Nodes Expanded in the Hard complexity setting
-    using the final validated data.
-    """
+def generate_benchmark_chart(): # Function made with the help of AI, benchmarking inputs made from running main.py file
     # Data from the Hard Complexity setting in your final output:
     algorithms = ['BFS', 'DFS', 'IDDFS', 'Best-First', 'A*']
     
-    # Extract the mean nodes expanded for Hard setting:
+    # input for the mean nodes expanded for Hard setting:
     # BFS: 60.60, DFS: 70.00, IDDFS: 177.00, Best-First: 50.40, A*: 68.60
     means = [60.60, 70.00, 177.00, 50.40, 68.60]
     
-    # Extract the std deviation for nodes expanded for Hard setting:
+    # input for the std deviation for nodes expanded for Hard setting:
     # BFS: 32.24, DFS: 23.42, IDDFS: 161.96, Best-First: 29.42, A*: 40.36
     stds = [32.24, 23.42, 161.96, 29.42, 40.36]
 

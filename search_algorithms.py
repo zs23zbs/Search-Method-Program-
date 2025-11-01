@@ -112,7 +112,7 @@ def Eculidean_heuristic(node_id, target_id, coordinates):
     
     return math.sqrt((x2 - x1)**2 + (y2 - y1)**2) # return the calculated value of Euclidean distance 
 
-def best_first(graph, start_node, target_node, coordinates): # Adjusted with the help of AI 
+def best_first(graph, start_node, target_node, coordinates): # Adjusted with the help of AI, mention in documentation
     nodes_expanded = 0
     peak_memory_usage = 0
     
