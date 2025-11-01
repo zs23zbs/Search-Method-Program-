@@ -234,3 +234,6 @@ if __name__ == "__main__":
 
        # make the visualization 
        visual_graph(random_graph, random_coordinates, a_star_path,"A_star_visual_path.png")
+
+       # running the batch benchmarking 
+       run_benchmark()
